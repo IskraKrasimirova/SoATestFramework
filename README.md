@@ -1,5 +1,9 @@
 ﻿# Selenium BDD Test Automation Framework (Endava SoA Training)
 
+
+[![CI Status](https://github.com/IskraKrasimirova/SeleniumFramework/actions/workflows/ci.yml/badge.svg)](https://github.com/IskraKrasimirova/SeleniumFramework/actions/workflows/ci.yml)
+
+
 This repository contains a **UI + API automation framework** built in C# using Selenium WebDriver and ReqNroll. The framework tests the **SoA SUT Application** — a microservices-based web platform for user management.
 
 --- 
