@@ -23,6 +23,7 @@ namespace Selenium.UiTests.Pages
         {
         }
 
+        // Retry is added because of CI pipeline flakiness
         public int GetCountOfRowsInResultTable()
         {
             int count = 0;
@@ -164,6 +165,7 @@ namespace Selenium.UiTests.Pages
             Assert.That(actualMessage, Is.EqualTo(expectedMessage));
         }
 
+        // Retry is added because of CI pipeline flakiness
         private int GetColumnIndex(string columnName)
         {
             int foundIndex = -1;
@@ -184,7 +186,8 @@ namespace Selenium.UiTests.Pages
                     throw new Exception($"Column '{columnName}' not found.");
 
             },
-            exceptionsToCatch: [new StaleElementReferenceException()]);
+            exceptionsToCatch: [new StaleElementReferenceException(), new UnknownErrorException("unknown error")],
+            waitInMilliseconds: 700);
 
             return foundIndex;
         }

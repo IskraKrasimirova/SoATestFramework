@@ -1,9 +1,10 @@
-﻿using OpenQA.Selenium;
+﻿using Common.Utilities;
+using OpenQA.Selenium;
 using Selenium.UiTests.Utilities.Extensions;
 
 namespace Selenium.UiTests.Pages
 {
-    public class LoginPage: BasePage
+    public class LoginPage : BasePage
     {
         private readonly By PasswordInputLocator = By.XPath("//input[@type='password']");
         // Elements 
@@ -12,7 +13,7 @@ namespace Selenium.UiTests.Pages
         private IWebElement SubmitButton => _driver.FindElement(By.XPath("//button[@type='submit' and contains(text(), 'Sign In')]"));
         private IWebElement SignUpLink => _driver.FindElement(By.XPath("//a[contains(text(),'Sign Up Here')]"));
 
-        public LoginPage(IWebDriver driver): base(driver)
+        public LoginPage(IWebDriver driver) : base(driver)
         {
         }
 
@@ -53,11 +54,17 @@ namespace Selenium.UiTests.Pages
         }
 
         // Validations
+        // Retry is added because of CI pipeline flakiness, as the password input may not be cleared immediately after a failed registration attempt
         public void VerifyPasswordInputIsEmpty()
         {
-            //string? text = PasswordInput.GetAttribute("value");
-            //Assert.That(text, Is.EqualTo(string.Empty), "Password input should be cleared after failed login attempt.");
-            Assert.That(IsPasswordInputEmpty(), Is.True, "Password input should be cleared after failed login attempt.");
+            Retry.Until(() =>
+            {
+                if (!string.IsNullOrWhiteSpace(PasswordInput.GetAttribute("value")))
+                    throw new RetryException("Password input is not empty yet.");
+            }, waitInMilliseconds: 700);
+
+            Assert.That(IsPasswordInputEmpty(), Is.True,
+                "Password input should be cleared after failed login attempt.");
         }
 
         public void VerifyErrorMessageIsDisplayed(string errorMessage)

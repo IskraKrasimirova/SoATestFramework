@@ -112,6 +112,7 @@ namespace Selenium.UiTests.Pages
             });
         }
 
+        // Retry is added because of CI pipeline flakiness, as the password input may not be cleared immediately after a failed registration attempt
         public void VerifyPasswordInputIsEmpty()
         {
             string? text = null;
@@ -124,24 +125,6 @@ namespace Selenium.UiTests.Pages
 
             Assert.That(text, Is.EqualTo(string.Empty), "Password input should be cleared after failed registration.");
         }
-
-        //public void VerifyPasswordInputIsEmpty()
-        //{
-        //    Retry.Until(() =>
-        //    {
-        //        string? text = PasswordInput.GetAttribute("value");
-
-        //        if (!string.IsNullOrEmpty(text))
-        //            throw new RetryException("Password input is not empty yet.");
-
-        //    },
-        //    retryNumber: 5,
-        //    waitInMilliseconds: 1000);
-
-        //    string? finalText = PasswordInput.GetAttribute("value");
-        //    Assert.That(finalText, Is.EqualTo(string.Empty),
-        //        "Password input should be cleared after failed registration.");
-        //}
 
         public void VerifyGlobalAlertMessage(string expectedMessage)
         {
