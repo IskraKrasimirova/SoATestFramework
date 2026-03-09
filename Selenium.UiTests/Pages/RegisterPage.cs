@@ -1,4 +1,5 @@
-﻿using OpenQA.Selenium;
+﻿using Common.Utilities;
+using OpenQA.Selenium;
 using OpenQA.Selenium.Support.UI;
 using Selenium.UiTests.Models;
 using Selenium.UiTests.Models.UserModels;
@@ -113,7 +114,14 @@ namespace Selenium.UiTests.Pages
 
         public void VerifyPasswordInputIsEmpty()
         {
-            string? text = PasswordInput.GetAttribute("value");
+            string? text = null;
+
+            Retry.Until(() =>
+            {
+                text = PasswordInput.GetAttribute("value");
+            },
+            exceptionsToCatch: [new StaleElementReferenceException()]);
+
             Assert.That(text, Is.EqualTo(string.Empty), "Password input should be cleared after failed registration.");
         }
 

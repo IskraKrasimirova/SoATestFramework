@@ -25,8 +25,16 @@ namespace Selenium.UiTests.Pages
 
         public int GetCountOfRowsInResultTable()
         {
-            var tableRows = ResultsTable.FindElements(By.XPath(".//tbody/tr"));
-            return tableRows.Count;
+            int count = 0;
+
+            Retry.Until(() =>
+            {
+                var tableRows = ResultsTable.FindElements(By.XPath(".//tbody/tr"));
+                count = tableRows.Count;
+            },
+            exceptionsToCatch: [new StaleElementReferenceException()]);
+
+            return count;
         }
 
         public List<UserSkillDto> GetAllRowsOfResultsTable()
@@ -158,15 +166,27 @@ namespace Selenium.UiTests.Pages
 
         private int GetColumnIndex(string columnName)
         {
-            var headers = _driver.FindElements(By.XPath("//table//thead//th"));
+            int foundIndex = -1;
 
-            for (int i = 0; i < headers.Count; i++)
+            Retry.Until(() =>
             {
-                if (headers[i].Text.Trim().Equals(columnName, StringComparison.OrdinalIgnoreCase)) 
-                    return i;
-            }
+                foundIndex = -1;
 
-            throw new Exception($"Column '{columnName}' not found.");
+                var headers = _driver.FindElements(By.XPath("//table//thead//th"));
+
+                for (int i = 0; i < headers.Count; i++)
+                {
+                    if (headers[i].Text.Trim().Equals(columnName, StringComparison.OrdinalIgnoreCase))
+                        foundIndex = i;
+                }
+
+                if (foundIndex == -1)
+                    throw new Exception($"Column '{columnName}' not found.");
+
+            },
+            exceptionsToCatch: [new StaleElementReferenceException()]);
+
+            return foundIndex;
         }
 
         private IReadOnlyCollection<IWebElement> GetColumnCells(string columnName)
