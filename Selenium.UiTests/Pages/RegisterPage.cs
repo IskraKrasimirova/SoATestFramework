@@ -120,10 +120,28 @@ namespace Selenium.UiTests.Pages
             {
                 text = PasswordInput.GetAttribute("value");
             },
-            exceptionsToCatch: [new StaleElementReferenceException()]);
+            exceptionsToCatch: [new StaleElementReferenceException()], waitInMilliseconds: 700);
 
             Assert.That(text, Is.EqualTo(string.Empty), "Password input should be cleared after failed registration.");
         }
+
+        //public void VerifyPasswordInputIsEmpty()
+        //{
+        //    Retry.Until(() =>
+        //    {
+        //        string? text = PasswordInput.GetAttribute("value");
+
+        //        if (!string.IsNullOrEmpty(text))
+        //            throw new RetryException("Password input is not empty yet.");
+
+        //    },
+        //    retryNumber: 5,
+        //    waitInMilliseconds: 1000);
+
+        //    string? finalText = PasswordInput.GetAttribute("value");
+        //    Assert.That(finalText, Is.EqualTo(string.Empty),
+        //        "Password input should be cleared after failed registration.");
+        //}
 
         public void VerifyGlobalAlertMessage(string expectedMessage)
         {
