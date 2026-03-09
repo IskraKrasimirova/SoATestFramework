@@ -12,7 +12,7 @@ jobs:
 
     steps:
       - name: Checkout test framework
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Clone SoA-SUT
         run: git clone https://github.com/Endava-Sofia/SoA-SUT.git
@@ -39,7 +39,7 @@ jobs:
           done
 
       - name: Setup .NET
-        uses: actions/setup-dotnet@v3
+        uses: actions/setup-dotnet@v4
         with:
           dotnet-version: '8.0.x'
 
@@ -51,7 +51,7 @@ jobs:
 
       - name: Upload test results
         if: always()
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: test-results
           path: "**/*.trx"
