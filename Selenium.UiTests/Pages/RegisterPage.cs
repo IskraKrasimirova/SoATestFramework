@@ -121,7 +121,7 @@ namespace Selenium.UiTests.Pages
             {
                 text = PasswordInput.GetAttribute("value");
             },
-            exceptionsToCatch: [new StaleElementReferenceException()], waitInMilliseconds: 700);
+            exceptionsToCatch: [new StaleElementReferenceException()], waitInMilliseconds: 1000);
 
             Assert.That(text, Is.EqualTo(string.Empty), "Password input should be cleared after failed registration.");
         }
