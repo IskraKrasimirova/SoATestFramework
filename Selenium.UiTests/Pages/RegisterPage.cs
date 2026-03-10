@@ -124,7 +124,8 @@ namespace Selenium.UiTests.Pages
                 if (!string.IsNullOrEmpty(text))
                     throw new RetryException("Password input is not empty yet.");
             },
-            exceptionsToCatch: [new StaleElementReferenceException()], waitInMilliseconds: 1000);
+            exceptionsToCatch: [new StaleElementReferenceException(), new UnknownErrorException("unknown error")], 
+            waitInMilliseconds: 1000);
 
             Assert.That(text, Is.EqualTo(string.Empty), "Password input should be cleared after failed registration.");
         }
