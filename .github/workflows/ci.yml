@@ -5,6 +5,9 @@ on:
     branches: [main]
   pull_request:
     branches: [main]
+  schedule:
+    - cron: "0 * * * *"
+  workflow_dispatch:
 
 jobs:
   test:
@@ -48,13 +51,20 @@ jobs:
 
       - name: Run tests
         run: dotnet test --logger "trx;LogFileName=results.trx"
-
-      - name: Upload test results
+        
+      - name: Upload TRX results
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: test-results
-          path: "**/*.trx"
+            name: all-test-results-trx
+            path: "**/TestResults/test-results.trx"
+
+      - name: Upload HTML report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+            name: all-test-results-html
+            path: "**/TestResults/test-report.html"
 
       - name: Stop application
         if: always()
