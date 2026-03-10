@@ -61,7 +61,7 @@ namespace Selenium.UiTests.Pages
             {
                 if (!string.IsNullOrWhiteSpace(PasswordInput.GetAttribute("value")))
                     throw new RetryException("Password input is not empty yet.");
-            }, waitInMilliseconds: 700);
+            }, waitInMilliseconds: 1000);
 
             Assert.That(IsPasswordInputEmpty(), Is.True,
                 "Password input should be cleared after failed login attempt.");

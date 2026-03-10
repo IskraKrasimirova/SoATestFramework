@@ -27,12 +27,19 @@ namespace Selenium.UiTests.Pages
         public int GetCountOfRowsInResultTable()
         {
             int count = 0;
+            int previousCount = -1;
 
             Retry.Until(() =>
             {
                 var tableRows = ResultsTable.FindElements(By.XPath(".//tbody/tr"));
                 count = tableRows.Count;
-            },
+
+                if (count == 0 || count != previousCount)
+                {
+                    previousCount = count;
+                    throw new RetryException("Table still loading...");
+                }
+            }, 
             exceptionsToCatch: [new StaleElementReferenceException()]);
 
             return count;
